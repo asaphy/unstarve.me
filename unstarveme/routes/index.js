@@ -10,7 +10,7 @@ var yelp = require("yelp").createClient({
 
 var results = "";
 
-function test (query, callback){ yelp.search({term: "food", location: query, limit: "1"}, function(error, data) {
+function test (query, callback){ yelp.search({term: "food", location: query, limit: "1", is_closed: 'false'}, function(error, data) {
   //console.log(error);
   console.log("gettingdata")
   console.log(data);
@@ -48,6 +48,7 @@ function getData(req, res, next) {
 }
 
 function renderData(req,res){
+  //added delay for asynchronity
   setTimeout(function(){
     res.render('index', { title: results });
   },1000);

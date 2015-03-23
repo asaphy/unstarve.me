@@ -18,8 +18,6 @@ function test (query, callback){ yelp.search({term: "food", location: query, lim
   console.log(results);
 });};
 
-test("Montreal", run);
-
 function run() {
   /* GET home page. */
   router.get('/', function(req, res) {

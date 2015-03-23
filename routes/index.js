@@ -9,16 +9,22 @@ var yelp = require("yelp").createClient({
 });
 
 var results = "";
-var resultAddress ="";
+var resultAddress;
 
 function test (query, callback){ yelp.search({term: "food", location: query, limit: "1", is_closed: 'false'}, function(error, data) {
-  //console.log(error);
-  console.log("gettingdata")
-  console.log(data);
-  results = data.businesses[0].name;
-  resultAddress = data.businesses[0].location.display_address;
-  console.log(results);
-  console.log(resultAddress);
+  console.log(error);
+  if(error == null){
+    console.log("gettingdata")
+    console.log(data);
+    results = data.businesses[0].name;
+    resultAddress = data.businesses[0].location.display_address;
+    console.log(results);
+    console.log(resultAddress);
+  }
+  else{
+   results = "Not Found";
+   resultAddress = "";
+  }
 });};
 
 function run() {
@@ -51,7 +57,7 @@ function getData(req, res, next) {
 function renderData(req,res){
   //added delay for asynchronity
   setTimeout(function(){
-    res.render('index', { title: results, address: JSON.stringify(resultAddress) });
+    res.render('index', { title: results, address: resultAddress });
   },1000);
 }
 

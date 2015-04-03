@@ -11,6 +11,7 @@ Web app to see what food place is open around you now!
 -Return more businesses
 -Connect with  Foursquare
 
+<<<<<<< HEAD
 4 Pages:
 Search/Homepage
 Result
@@ -18,3 +19,9 @@ Signup(think Facebook or JS Modal?)
 Profile
 
 
+=======
+4 Pages:
+Search/Homepage
+Result
+Signup(think Facebook or JS Modal?)
+Profile

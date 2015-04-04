@@ -2,7 +2,7 @@
 Web app to see what food place is open around you now!  
 
 #ToDos:  
--Host on AWS(Simon) http://aws.amazon.com/sdk-for-node-js/  
+-Host on AWS(Simon)  
 -Database/Login/UserProfile with MySQL on AWS(Elettra or Eric?)   
 -Sign up front end()   
 -Favorites front end()   

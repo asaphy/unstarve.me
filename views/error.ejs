@@ -1,0 +1,25 @@
+//extends layout
+
+//block content
+//  h1= message
+//  h2= error.status
+//  pre #{error.stack}
+
+<html>
+    <head>
+        <title><%=(locals.title) ? title :''%></title>
+        <h1>"Unstarve.me"</h1>
+    </head>
+    <body>
+        <form name = "search-yelp", method = "get" ,action="search">
+            <div class ="input">
+                <span>Query:</span> <input type ="text", name="query">
+            </div>
+            <div class ="actions">
+                <input type ="submit", value="Search">
+            </div>
+        </form>
+        <h2><%=(locals.error.status) ? error :''%></h2>
+    </body>
+
+</html>

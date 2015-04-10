@@ -10,7 +10,9 @@ var yelp = require("yelp").createClient({
 
 var results = "";
 var resultAddress;
-
+var resultLocation;
+var resultLat;
+var resultLon;
 function test (query, callback){ yelp.search({term: "food", location: query, limit: "1", is_closed: 'false'}, function(error, data) {
   console.log(error);
   if(error == null){
@@ -18,8 +20,14 @@ function test (query, callback){ yelp.search({term: "food", location: query, lim
     console.log(data);
     results = data.businesses[0].name;
     resultAddress = data.businesses[0].location.display_address;
+    resultLocation = data.businesses[0].location;
+    resultLat = resultLocation.coordinate["latitude"]
+    resultLon = resultLocation.coordinate["longitude"]
     console.log(results);
     console.log(resultAddress);
+    //L.mapbox.accessToken = 'pk.eyJ1IjoiZXJpY3NwYXJrIiwiYSI6ImdNRHBRbEEifQ.7zd5YN-UFOKHwG_bqzhJpQ';
+    //var map = new L.mapbox.map('map', 'ericspark.lm0fj82m').setView([42.3645782, -71.0534363],16);
+    //L.marker([42.3645782, -71.0534363]).addTo(map);
   }
   else{
    results = "Not Found";
@@ -30,7 +38,7 @@ function test (query, callback){ yelp.search({term: "food", location: query, lim
 function run() {
   /* GET home page. */
   router.get('/', function(req, res) {
-    res.render('index', { title: results, address: resultAddress });
+    res.render('index', { title: results, address: resultAddress, lat: resultLat, lon: resultLon});
   });
 }
 
@@ -57,7 +65,7 @@ function getData(req, res, next) {
 function renderData(req,res){
   //added delay for asynchronity
   setTimeout(function(){
-    res.render('index', { title: results, address: resultAddress });
+    res.render('index', { title: results, address: resultAddress, lat: resultLat, lon: resultLon });
   },1000);
 }
 

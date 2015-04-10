@@ -1,0 +1,43 @@
+<%- include layout.ejs %>
+
+<html>
+    <head>
+        <title><%=(locals.title) ? title :''%></title>
+        <div class = "right">
+            <button type="button">Sign In</button>
+            <button type="button">Sign Up</button>
+        </div>
+        <h1>"Unstarve.me"</h1>
+    </head>
+    <body>
+        <script src='ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'>
+        </script>
+        <form name = "search-yelp", method = "get" , action="search">
+            <div class ="input">
+                <span>Query </span> <input type ="text", name="query">
+            </div>
+            <div class ="actions">
+                <input type ="submit", value="Search">
+            </div>
+        </form>
+        <h2>Search Result:</h2>
+        <div id='map'></div>
+        <script>
+            var layer = L.mapbox.featureLayer('ericspark.lm0fj82m');
+            layer.on('ready', function() {
+                // the layer has been fully loaded now, and you can
+                // call .getTileJSON and investigate its properties
+            });
+            L.mapbox.accessToken = 'pk.eyJ1IjoiZXJpY3NwYXJrIiwiYSI6ImdNRHBRbEEifQ.7zd5YN-UFOKHwG_bqzhJpQ';
+            var map = new L.mapbox.map('map', 'ericspark.lm0fj82m').setView(new L.LatLng[42.3645782, -71.0534363],16);
+            L.marker([<%=(locals.lat) ? lat :''%>, <%=(locals.lon) ? lon :''%>]).addTo(map);
+
+        </script>
+        <iframe width='100%' height='500px' frameBorder='0' src='https://a.tiles.mapbox.com/v4/ericspark.lm0fj82m/attribution,zoompan,zoomwheel,geocoder,share.html?access_token=pk.eyJ1IjoiZXJpY3NwYXJrIiwiYSI6ImdNRHBRbEEifQ.7zd5YN-UFOKHwG_bqzhJpQ'></iframe>
+        <h2><%=(locals.title) ? title :''%></h2>
+        <h3><%=(locals.address) ? address :''%></h3>
+        <h2><%=(locals.lat) ? lat :''%></h2>
+        <h3><%=(locals.lon) ? lon :''%></h3>
+    </body>
+
+</html>

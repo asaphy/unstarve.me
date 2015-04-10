@@ -5,5 +5,18 @@
 </head>
 <body style='color: darkgray; text-align: center;'>
     <script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+    <script>
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        $.post("/postLatLng",{lat:position.coords.latitude,lng:position.coords.longitude});
+        console.log("posted");
+      }, function() {
+        handleNoGeolocation(true);
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleNoGeolocation(false);
+    }
+    </script>
 </body>
 </html>

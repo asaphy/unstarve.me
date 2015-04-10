@@ -74,6 +74,7 @@
               // Try HTML5 geolocation
               if(navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
+                  $.post("/postLatLng",{lat:position.coords.latitude,lng:position.coords.longitude});
                   var pos = new google.maps.LatLng(position.coords.latitude,
                                                    position.coords.longitude);
                   var infowindow = new google.maps.Marker({
@@ -145,8 +146,6 @@
         <div>
         <h2><%=(locals.title) ? title :''%></h2>
         <h3><%=(locals.address) ? address :''%></h3>
-        <h2><%=(locals.lat) ? lat :''%></h2>
-        <h3><%=(locals.lon) ? lon :''%></h3>
         </div>
     </body>
 

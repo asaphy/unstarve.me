@@ -17,10 +17,10 @@ var map;
 var infowindow;
 
 function initialize() {
-
+  var currentLocation;
   if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
-        var currentLocation = new google.maps.LatLng(lat:position.coords.latitude,lng:position.coords.longitude);
+        currentLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       }, function() {
         handleNoGeolocation(true);
       });

@@ -1,152 +1,51 @@
 <%- include layout.ejs %>
 
 <html>
-    <head>
-        <title><%=(locals.title) ? title :''%></title>
-        <div class = "right">
-            <button type="button">Sign In</button>
-            <button type="button">Sign Up</button>
-        </div>
-        <h1>"Unstarve.me"</h1>
-        <style>
-      html, body, #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px
-      }
-    </style>
-    <style>
-      #directions-panel {
-        height: 100%;
-        float: left;
-        width: 390px;
-        overflow: auto;
-      }
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>Google Maps Multiple Markers</title>
+  <script src="http://maps.google.com/maps/api/js?sensor=false"
+          type="text/javascript"></script>
+</head>
+<body>
+  <div id="map" style="width: 500px; height: 400px;"></div>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
-      #map-canvas {
-        margin-left: 400px;
-      }
+  <script type="text/javascript">
+    var result = new google.maps.LatLng(<%=(locals.lat) ? lat :''%>, <%=(locals.lon) ? lon :''%>);
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: result,
+        zoom: 15
+    });
 
-      #control {
-        background: #fff;
-        padding: 5px;
-        font-size: 14px;
-        font-family: Arial;
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-        display: none;
-      }
+    var infowindow = new google.maps.InfoWindow();
+    var service = new google.maps.places.PlacesService(map);
 
-      @media print {
-        #map-canvas {
-          height: 500px;
-          margin: 0;
-        }
+    var places = <%- JSON.stringify(placesID) %>;
+    console.log(places);
+    var marker, i;
 
-        #directions-panel {
-          float: none;
-          width: auto;
-        }
-      }
-    </style>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-        <script>
-            // Note: This example requires that you consent to location sharing when
-            // prompted by your browser. If you see a blank space instead of the map, this
-            // is probably because you have denied permission for location sharing.
-            var directionsDisplay;
-            var directionsService = new google.maps.DirectionsService();
 
-            var map;
-            var result = new google.maps.LatLng(<%=(locals.lat) ? lat :''%>, <%=(locals.lon) ? lon :''%>);
-            var marker;
+    for (i = 0; i < places.length; i++) {
+      var request = {
+          placeId: places[i]
+      };
+      service.getDetails(request, function (place, status) {
 
-            function initialize() {
-              directionsDisplay = new google.maps.DirectionsRenderer();
-              var mapOptions = {
-                zoom: 13
-              };
-              map = new google.maps.Map(document.getElementById('map-canvas'),
-                  mapOptions);
-              directionsDisplay.setMap(map);
-              directionsDisplay.setPanel(document.getElementById('directions-panel'));
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
 
-              // Try HTML5 geolocation
-              if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                  $.post("/postLatLng",{lat:position.coords.latitude,lng:position.coords.longitude});
-                  var pos = new google.maps.LatLng(position.coords.latitude,
-                                                   position.coords.longitude);
-                  var infowindow = new google.maps.Marker({
-                    map: map,
-                    position: pos,
-                  });
-                  var start = pos;
-                  var end = result;
-                  var request = {
-                    origin: start,
-                    destination: end,
-                    travelMode: google.maps.TravelMode.WALKING
-                  };
-                  directionsService.route(request, function(response, status) {
-                    if (status == google.maps.DirectionsStatus.OK) {
-                      directionsDisplay.setDirections(response);
-                    }
-                  });
-                  map.setCenter(pos);
-                }, function() {
-                  handleNoGeolocation(true);
-                });
-              } else {
-                // Browser doesn't support Geolocation
-                handleNoGeolocation(false);
-              }
-
-              marker = new google.maps.Marker({
-                map:map,
-                draggable:true,
-                animation: google.maps.Animation.DROP,
-                position: result
+              var marker = new google.maps.Marker({
+                  map: map,
+                  position: place.geometry.location
               });
-            }
 
-            function handleNoGeolocation(errorFlag) {
-              if (errorFlag) {
-                var content = 'Error: The Geolocation service failed.';
-              } else {
-                var content = 'Error: Your browser doesn\'t support geolocation.';
-              }
-
-              var options = {
-                map: map,
-                position: new google.maps.LatLng(60, 105),
-                content: content
-              };
-
-              var infowindow = new google.maps.InfoWindow(options);
-              map.setCenter(options.position);
-            }
-
-            google.maps.event.addDomListener(window, 'load', initialize);
-
-        </script>
-    </head>
-    <body>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <form name = "search-yelp", method = "get" , action="search">
-            <div class ="input">
-                <span>Query </span> <input type ="text", name="query">
-            </div>
-            <div class ="actions">
-                <input type ="submit", value="Search">
-            </div>
-        </form>
-        <div id="directions-panel"></div>
-        <div id="map-canvas"></div>
-        <div>
-        <h2><%=(locals.title) ? title :''%></h2>
-        <h3><%=(locals.address) ? address :''%></h3>
-        </div>
-    </body>
-
+              google.maps.event.addListener(marker, 'click', function () {
+                  infowindow.setContent(place.name);
+                  infowindow.open(map, this);
+              });
+          }
+      });
+    }
+  </script>
+</body>
 </html>
